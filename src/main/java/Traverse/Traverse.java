@@ -32,7 +32,9 @@ public class Traverse {
      *
      * @return List of matrix elements traversed in the clockwise direction
      *
-     *  TODO: Nice to have to this with Generics to support other types
+     *  TODO: A nice to implement this with Generics to support other types.
+     *        Memory complexity can be reduced by not returning the result array
+     *        but it makes testing more complex
      *
      */
 
