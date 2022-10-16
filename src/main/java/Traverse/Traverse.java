@@ -2,6 +2,9 @@ package Traverse;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
 
 /**
  * Clockwise Traversal of an Integer Array
@@ -11,8 +14,12 @@ import java.util.List;
 
 public class Traverse {
 
+    public static final Logger logger
+            = Logger.getLogger(
+            Traverse.class.getName());
 
     public static void main(String[] args) {
+
         int[][] matrix;
         matrix = new int[][]{
                 {1, 2, 3, 4},
@@ -40,7 +47,9 @@ public class Traverse {
 
     public static List<Integer> traverse(int[][] matrix) {
 
+
         if (!isArrayValid(matrix)) {
+            logger.log(Level.WARNING, "Can't validate input Matrix");
             return List.of();
         }
 
@@ -54,6 +63,7 @@ public class Traverse {
         int i;
 
         List<Integer> result = new ArrayList<>();
+        logger.log(Level.INFO, "Starting to traverse the matrix...");
 
         // traverse the matrix clockwise direction on the boundaries
         while (topBoundary <= bottomBoundary && leftBoundary <= rightBoundary) {
@@ -82,24 +92,10 @@ public class Traverse {
                 leftBoundary += 1;
             }
 
-            // Change the direction when reached to a boundary in clockwise format
-            switch (currentDirection) {
-                case RIGHT:
-                    currentDirection = Directions.DOWN;
-                    break;
-                case DOWN:
-                    currentDirection = Directions.LEFT;
-                    break;
-                case LEFT:
-                    currentDirection = Directions.UP;
-                    break;
-                case UP:
-                    currentDirection = Directions.RIGHT;
-                    break;
-                default:
-                    return List.of();
-            }
+            currentDirection = changeDirectionClockwise(currentDirection);
+
         }
+        logger.log(Level.INFO, "Finished traversing the matrix...");
         return result;
     }
 
@@ -116,17 +112,40 @@ public class Traverse {
         if (matrix == null ||
                 matrix.length == 0 ||
                 matrix[0].length == 0) {
+            logger.log(Level.WARNING, "There are empty elements in the matrix...");
             return false;
         }
         int rowLength = matrix[0].length;
 
         for (int[] row : matrix) {
             if (row.length != rowLength) {
+                logger.log(Level.WARNING, "The matrix has uneven dimensions...");
                 return false;
             }
-
         }
         return true;
+    }
+
+    protected static Directions changeDirectionClockwise(Directions direction){
+        // Change the direction when reached to a boundary in clockwise format
+        switch (direction) {
+            case RIGHT:
+                direction = Directions.DOWN;
+                break;
+            case DOWN:
+                direction = Directions.LEFT;
+                break;
+            case LEFT:
+                direction = Directions.UP;
+                break;
+            case UP:
+                direction = Directions.RIGHT;
+                break;
+
+            default:
+                direction = Directions.RIGHT;
+        }
+        return direction;
     }
 
     enum Directions {
